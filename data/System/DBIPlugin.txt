@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="micha" date="1648549480" format="1.1" version="2"}%
+%META:TOPICINFO{author="ProjectContributor" date="1648549480" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -65,7 +65,7 @@ HERE
 ---++ Change History
 
 %TABLE{columnwidths="7em" tablewidth="100%"}%
-|  29 Mar 2022 | initial release |
+|  27 Apr 2022 | initial release |
 
 %META:FORM{name="PackageForm"}%
 %META:FIELD{name="Author" title="Author" value="Michael Daum"}%
