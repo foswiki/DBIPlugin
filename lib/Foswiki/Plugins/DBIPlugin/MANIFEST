@@ -1,0 +1,20 @@
+!noci
+data/System/DBIPluginPerlAPI.txt 0644
+data/System/DBIPlugin.txt 0644
+lib/Foswiki/DBI/Database/Generic.pm 0644
+lib/Foswiki/DBI/Database/MariaDB.pm 0644
+lib/Foswiki/DBI/Database/MySQL.pm 0644
+lib/Foswiki/DBI/Database.pm 0644
+lib/Foswiki/DBI/Database/PostgreSQL.pm 0644
+lib/Foswiki/DBI/Database/SQLite.pm 0644
+lib/Foswiki/DBI.pm 0644
+lib/Foswiki/DBI/Schema/Generic.pm 0644
+lib/Foswiki/DBI/Schema/MariaDB.pm 0644
+lib/Foswiki/DBI/Schema/MySQL.pm 0644
+lib/Foswiki/DBI/Schema.pm 0644
+lib/Foswiki/DBI/Schema/PostgreSQL.pm 0644
+lib/Foswiki/DBI/Schema/SQLite.pm 0644
+lib/Foswiki/Iterator/DBIterator.pm 0644
+lib/Foswiki/Plugins/DBIPlugin/Config.spec 0644
+lib/Foswiki/Plugins/DBIPlugin/DEPENDENCIES 0644
+lib/Foswiki/Plugins/DBIPlugin.pm 0644

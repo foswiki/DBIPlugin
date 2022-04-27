@@ -1,0 +1,9 @@
+*.swp
+*,v
+/DBIPlugin.md5
+/DBIPlugin.sha1
+/DBIPlugin.tgz
+/DBIPlugin.txt
+/DBIPlugin.zip
+/DBIPlugin_installer
+/DBIPlugin_installer.pl

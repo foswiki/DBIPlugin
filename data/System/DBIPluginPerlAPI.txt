@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="micha" comment="reprev" date="1648549528" format="1.1" reprev="2" version="2"}%
+%META:TOPICPARENT{name="DBIPlugin"}%
+---+ DBIPlugin Perl API
+<!--
+   * Set EDITCHAPTERPLUGIN_ENABLED = off
+-->
+
+%TOC%
+
+%INCLUDE{"doc:Foswiki::DBI" level="2"}%
+%INCLUDE{"doc:Foswiki::DBI::Database" level="2"}%
+%INCLUDE{"doc:Foswiki::DBI::Schema" level="2"}%
+%INCLUDE{"doc:Foswiki::Iterator::DBIterator" level="2"}%

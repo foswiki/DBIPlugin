@@ -1,0 +1,5 @@
+DBI,>=1.0,cpan,Required
+DBD::MariaDB,>=1.54,cpan,Recommended
+DBD::SQLite,>=1.54,cpan,Optional
+DBD::Pg,>=3,cpan,Optional
+DBD::mysql,>=4,cpan,Optional

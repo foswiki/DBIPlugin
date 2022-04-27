@@ -1,0 +1,79 @@
+%META:TOPICINFO{author="micha" date="1648549480" format="1.1" version="2"}%
+---+!! %TOPIC%
+%FORMFIELD{"Description"}%
+
+%TOC%
+
+---++ Description
+
+This plugin offers a middle layer for Foswiki extensions to ease connecting to 
+SQL databases and manage schemes of table and index definitions. The idea is to
+keep things as lean as possible without imposing any additional structure. <nop>DBIPlugin
+will maintain a plugin's database scheme to make sure it is created and updated as required.
+
+A plugin sub-classes =Foswiki::DBI::Schema= which is then loaded before
+connecting to a database. While connecting to the database the schema then is added to the database.
+
+<nop>DBIPlugin supports any database for which a DBD perl driver is available. A plugin may support
+multiple databases where the schemes differ in parts. For example the schema for SQLite differs
+from the one for <nop>MariaDB, <nop>MySQL or <nop>PostgreSQL. The plugin will then implement:
+
+   * =Foswiki::DBISchema::SQLite=
+   * =Foswiki::DBISchema::MariaDB=
+   * =Foswiki::DBISchema::MySQL=
+   * =Foswiki::DBISchema::PostgreSQL=
+
+The syntax of each of them are custom tailored towards the respective database vendor. Note
+however that from there on it is the plugin's responsibility to cope with further differences
+among databases beyond just schema definitions.
+
+Have a look at [[DBIPluginPerlAPI]] for further information.
+
+---++ Creating a Foswiki database
+
+The base assumption of <nop>DBIPLugin is that all plugins share a single database that all
+tables and indexes are created within. This means that plugins must pay attention to naming them.
+Best practices is to prefix any table or index with the name of the plugin. For example <nop>LikePlugin
+stores its data in a table called =LikePlugin_likes=. 
+
+Before configuring <nop>DBIPlugin you need to create a database and a user/password for this plugin
+(except for SQLite). For instance a shell script like this will do:
+
+<verbatim class="bash">
+#!/bin/sh
+
+database_server=$1
+database_name=$2
+database_user=$3
+database_password=$4
+
+echo "creating database $database_name on $database_server"
+cat <<HERE | mysql -h $database_server
+CREATE USER IF NOT EXISTS $database_user@$database_server IDENTIFIED BY '$database_password';
+CREATE DATABASE IF NOT EXISTS $database_name;
+GRANT ALL ON $database_name.* TO $database_user@$database_server;
+FLUSH PRIVILEGES;
+HERE
+</verbatim>
+
+---++ Installation Instructions
+%$INSTALL_INSTRUCTIONS%
+
+---++ Dependencies
+%$DEPENDENCIES%
+
+---++ Change History
+
+%TABLE{columnwidths="7em" tablewidth="100%"}%
+|  29 Mar 2022 | initial release |
+
+%META:FORM{name="PackageForm"}%
+%META:FIELD{name="Author" title="Author" value="Michael Daum"}%
+%META:FIELD{name="Version" title="Version" value="%25$VERSION%25"}%
+%META:FIELD{name="Release" title="Release" value="%25$RELEASE%25"}%
+%META:FIELD{name="Description" title="Description" value="%25$SHORTDESCRIPTION%25"}%
+%META:FIELD{name="Repository" title="Repository" value="https://github.com/foswiki/%25$ROOTMODULE%25"}%
+%META:FIELD{name="Copyright" title="Copyright" value="2021-2022, Michael Daum, All Rights Reserved"}%
+%META:FIELD{name="License" title="License" value="GPL ([[https://www.gnu.org/copyleft/gpl.html][GNU General Public License]])"}%
+%META:FIELD{name="Home" title="Home" value="https://foswiki.org/Extensions/%25$ROOTMODULE%25"}%
+%META:FIELD{name="Support" title="Support" value="https://foswiki.org/Support/%25$ROOTMODULE%25"}%
