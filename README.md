@@ -21,5 +21,3 @@ from the one for <nop>MariaDB, <nop>MySQL or <nop>PostgreSQL. The plugin will th
 The syntax of each of them are custom tailored towards the respective database vendor. Note
 however that from there on it is the plugin's responsibility to cope with further differences
 among databases beyond just schema definitions.
-
-Have a look at [DBIPluginPerlAPI](data/System/DBIPluginPerlAPI.txt) for further information.
