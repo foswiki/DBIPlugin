@@ -22,4 +22,4 @@ The syntax of each of them are custom tailored towards the respective database v
 however that from there on it is the plugin's responsibility to cope with further differences
 among databases beyond just schema definitions.
 
-Have a look at DBIPluginPerlAPI for further information.
+Have a look at [DBIPluginPerlAPI](data/System/DBIPluginPerlAPI.txt) for further information.
