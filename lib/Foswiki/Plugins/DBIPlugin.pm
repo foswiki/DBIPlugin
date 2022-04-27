@@ -19,7 +19,7 @@ use strict;
 use warnings;
 use Foswiki::DBI;
 
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 our $RELEASE = '27 Apr 2022';
 our $SHORTDESCRIPTION = 'Database middle layer to manage connections and schemes';
 our $NO_PREFS_IN_TOPIC = 1;

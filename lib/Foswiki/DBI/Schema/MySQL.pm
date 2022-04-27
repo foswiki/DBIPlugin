@@ -18,8 +18,23 @@ package Foswiki::DBI::Schema::MySQL;
 use strict;
 use warnings;
 
-use Foswiki::DBI::Schema::MariaDB;
-our @ISA = ('Foswiki::DBI::Schema::MariaDB');
+use Foswiki::DBI::Schema;
+our @ISA = ('Foswiki::DBI::Schema');
+
+sub getDefinition {
+  return [[
+      'CREATE TABLE IF NOT EXISTS %prefix%meta (
+          id SERIAL,
+          type VARCHAR(255) NOT NULL, 
+          version INT NOT NULL
+      ) DEFAULT CHARSET=utf8 DEFAULT COLLATE utf8_unicode_ci',
+
+      'CREATE UNIQUE INDEX %prefix%idx_meta_type ON %prefix%meta (type)',
+  ]];
+}
+
+sub getType { return "db"; }
+
 
 1;
 
