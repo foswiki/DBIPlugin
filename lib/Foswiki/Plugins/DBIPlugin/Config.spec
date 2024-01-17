@@ -31,7 +31,7 @@ $Foswiki::cfg{DBI}{Database} = '';
 # Database user name. Add a value if your database needs authentication.
 $Foswiki::cfg{DBI}{Username} = '';
 
-# **STRING LABEL="Database Password" CHECK="undefok emptyok" **
+# **PASSWORD LABEL="Database Password" CHECK="undefok emptyok" **
 # Database user name. Add a value if your database needs authentication.
 $Foswiki::cfg{DBI}{Password} = '';
 

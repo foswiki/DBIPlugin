@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, https://foswiki.org/
 #
-# DBIPlugin is Copyright (C) 2021-2022 Michael Daum http://michaeldaumconsulting.com
+# DBIPlugin is Copyright (C) 2021-2024 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -41,8 +41,10 @@ sub getDB {
 
   unless ($DB) {
     my $impl = $Foswiki::cfg{DBI}{Implementation};
-    eval "require $impl";
-    die($@) if $@;
+    my $pmFile = $impl . ".pm";
+    $pmFile =~ s/::/\//g;
+    eval {require $pmFile};
+    die("ERROR: $@") if $@;
 
     $DB = $impl->new();
 
@@ -88,12 +90,13 @@ sub loadSchema {
   my $schemaBase = shift;
 
   my $db = getDB();
-  my $package = $schemaBase."::".$db->getClassName();
+  my $impl = $schemaBase."::".$db->getClassName();
+  my $pmFile = $impl . ".pm";
+  $pmFile =~ s/::/\//g;
 
-  eval "require $package";
-  die("ERROR: $@") if $@;
+  require $pmFile;
 
-  my $schema = $package->new();
+  my $schema = $impl->new();
   $db->applySchema($schema);
 
   return $db;

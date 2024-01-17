@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, https://foswiki.org/
 #
-# DBIPlugin is Copyright (C) 2021-2022 Michael Daum http://michaeldaumconsulting.com
+# DBIPlugin is Copyright (C) 2021-2024 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@ package Foswiki::DBI::Database::Generic;
 ---+ package Foswiki::DBI::Database::Generic
 
 Connects to a generic database supported by perl's DBI. This class does not
-have a constructor of its own. See =Foswiki::DBD::Database= instead.
+have a constructor of its own. See Foswiki::DBI::Database instead.
 
 =cut
 

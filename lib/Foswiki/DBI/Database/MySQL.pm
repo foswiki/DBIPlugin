@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, https://foswiki.org/
 #
-# DBIPlugin is Copyright (C) 2021-2022 Michael Daum http://michaeldaumconsulting.com
+# DBIPlugin is Copyright (C) 2021-2024 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -46,6 +46,9 @@ sub new {
   $this->{dsn} .= ';host=' . $this->{host};
   $this->{dsn} .= ';port=' . $this->{port} if $this->{port};
   $this->{params}{mysql_enable_utf8} = 1;
+
+# deprecated
+#  $this->{params}{mysql_auto_reconnect} = 1;
 
   return $this;
 }

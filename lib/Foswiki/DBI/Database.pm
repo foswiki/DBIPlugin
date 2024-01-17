@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, https://foswiki.org/
 #
-# DBIPlugin is Copyright (C) 2021-2022 Michael Daum http://michaeldaumconsulting.com
+# DBIPlugin is Copyright (C) 2021-2024 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,16 +19,26 @@ package Foswiki::DBI::Database;
 
 ---+ package Foswiki::DBI::Database
 
+abstract class for any type of database connecting to foswiki
+
 =cut
 
 use strict;
 use warnings;
 
 use Foswiki::Func ();
+use Assert;
 use Error qw(:try);
 use DBI;
 use Foswiki::Iterator::DBIterator();
 #use Data::Dump qw(dump);
+
+# memory cache
+my %SCHEMA_VERSIONS = ();
+
+# normal operations cache schema versions in memory
+# sunit tests run without memory caching as the dabase is torn down repeatedly
+use constant MEMORYCACHE => 0;
 
 =begin TML
 
@@ -55,6 +65,8 @@ sub new {
     params => $Foswiki::cfg{DBI}{Params},
     @_
   }, $class);
+
+  #$this->{debug} = 1;
 
   $this->{params}{PrintError} = 0;
   $this->{params}{RaiseError} = 1;
@@ -97,44 +109,62 @@ sub applySchema {
   return unless defined $schema && ref($schema);
 
   my $type = $schema->getType();
+
   my $definition = $schema->getDefinition();
 
   $this->writeDebug("called applySchema($schema)");
 
   my $index = $this->schemaVersion($type);
+  my $numDefinitions = scalar(@$definition);
+  if ($index == $numDefinitions) {
+    $this->writeDebug("... nothing to do");
+    return;
+  }
 
-  while(my $stms = $definition->[$index]) {
-    $this->writeDebug("... applying version=$index to $type");
+  my $found = 0;
+  my $error;
 
-    $this->handler->begin_work;
-    my $error;
+  $this->handler->begin_work;
+
+  if ($index < $numDefinitions) {
+    $this->writeDebug("... updating database with ".($numDefinitions - $index)." new definitions");
+  
     try {
-      foreach my $stm (@$stms) {
-        if (ref($stm) eq 'CODE') {
-          $stm->($this->handler);
-        } else {
-          my $prefix = $type."_";
-          $stm =~ s/\%prefix\%/$prefix/g;
-          $this->writeDebug("stm=$stm");
-          my $res = $this->handler->do($stm);
-          $this->writeDebug("...res=$res");
+      while(my $stms = $definition->[$index]) {
+        $this->writeDebug("... applying version=$index to $type");
+        $found = 1;
+
+        foreach my $stm (@$stms) {
+          if (ref($stm) eq 'CODE') {
+            $stm->($this->handler);
+          } else {
+            my $prefix = $type."_";
+            $stm =~ s/\%prefix\%/$prefix/g;
+            #$this->writeDebug("stm=$stm");
+            my $res = $this->handler->do($stm);
+            #$this->writeDebug("...res=$res");
+          }
         }
+
+        $index++;
       }
     } catch Error with {
       $error = shift;
     };
-
-    if (defined $error) {
-      $this->handler->rollback;
-      throw Error::Simple("ERROR during applySchema(): ".$error);
-    }
-
-    $this->schemaVersion($type, $index+1);
-    $this->handler->commit();
-    $index++;
+  } else {
+    $this->writeDebug("... downgrading schema version from $index to $numDefinitions");
+    $index = $numDefinitions;
+    $found = 1;
   }
 
-  $this->writeDebug("... type=$type, index=$index");
+  if (defined $error) {
+    $this->handler->rollback;
+    throw Error::Simple("ERROR during applySchema(): ".$error);
+  }
+
+  $this->handler->commit();
+
+  $this->schemaVersion($type, $index) if $found;
 }
 
 =begin TML
@@ -148,28 +178,35 @@ getter/setter for the schema version meta data
 sub schemaVersion {
   my ($this, $type, $version) = @_;
 
-  unless (keys %{$this->{_schemaVersions}}) {
+  $this->writeDebug("called schemaVersion($type, ".($version//'undef').")");
+
+  my $schemaVersions = MEMORYCACHE ? \%SCHEMA_VERSIONS : $this->{_schemaVersions};
+
+  if (keys %$schemaVersions) {
+    $this->writeDebug("... already loaded schemaVersions");
+  } else {
     my $error;
     try {
       $this->writeDebug("... loading schemaVersions($type)");
       my $res = $this->handler->selectall_hashref("SELECT * FROM db_meta", "type");
-      $this->{_schemaVersions} = $res;
+      %$schemaVersions = %$res;
 
     } catch Error with {
       $error = shift;
       print STDERR "ERROR: $error\n" if $type ne 'db'; # ignore initial creation of db_meta
-      $this->{_schemaVersions} = {};
+      %$schemaVersions = ();
     };
   }
 
   if (defined $version) {
+    $this->writeDebug("... setting db_meta type=$type to version=$version");
     my $res = $this->handler->do("REPLACE INTO db_meta (type, version) VALUES(?, ?)", {}, $type, $version);
-    $this->{_schemaVersions}{$type}{version} = $version;
+    $schemaVersions->{$type}{version} = $version;
   } else {
-    $version = $this->{_schemaVersions}{$type}{version} || 0;
+    $version = $schemaVersions->{$type}{version} || 0;
   }
 
-  #$this->writeDebug("schemaVersion($type)=$version");
+  $this->writeDebug("... $type is at version $version");
 
   return $version;
 }

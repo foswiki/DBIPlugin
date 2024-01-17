@@ -1,6 +1,6 @@
 # Extension for Foswiki - The Free and Open Source Wiki, http://foswiki.org/
 #
-# DBIPlugin is Copyright (C) 2021-2022 Michael Daum http://michaeldaumconsulting.com
+# DBIPlugin is Copyright (C) 2021-2024 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -76,6 +76,7 @@ sub new {
 sub DESTROY {
   my $this = shift;
 
+  $this->{sth}->finish() if defined $this->{sth};
   undef $this->{sth};
   undef $this->{_row};
 }
@@ -116,6 +117,20 @@ sub next {
 
 =begin TML
 
+---++ ObjectMethod count() -> $integer
+
+returns the number of rows affected by this iterator
+
+=cut
+
+sub count {
+  my $this = shift;
+
+  return $this->{sth}->rows();
+}
+
+=begin TML
+
 ---++ ObjectMethod reset() 
 
 resets the iterator to restart the search to the beginning. note that the
@@ -128,7 +143,7 @@ sub reset {
   my $this = shift;
 
   $this->{sth}->finish() if defined $this->{sth};
-  $this->{sth} = $this->{dbh}->prepare($this->{select});
+  $this->{sth} = $this->{dbh}->prepare_cached($this->{select});
   $this->{sth}->execute(@{$this->{values}});
 
   $this->{_row} = $this->{sth}->fetchrow_hashref();

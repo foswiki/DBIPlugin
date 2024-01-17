@@ -1,6 +1,6 @@
 # Plugin for Foswiki - The Free and Open Source Wiki, https://foswiki.org/
 #
-# DBIPlugin is Copyright (C) 2021-2022 Michael Daum http://michaeldaumconsulting.com
+# DBIPlugin is Copyright (C) 2021-2024 Michael Daum http://michaeldaumconsulting.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ sub getDefinition {
           id SERIAL,
           type VARCHAR(255) NOT NULL, 
           version INT NOT NULL
-      ) DEFAULT CHARSET=utf8 DEFAULT COLLATE utf8_unicode_ci',
+      ) DEFAULT CHARSET=utf8 DEFAULT COLLATE utf8_bin',
 
       'CREATE UNIQUE INDEX IF NOT EXISTS %prefix%idx_meta_type ON %prefix%meta (type)',
   ]];
