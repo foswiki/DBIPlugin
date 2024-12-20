@@ -19,7 +19,7 @@ use strict;
 use warnings;
 use Foswiki::DBI;
 
-our $VERSION = '2.01';
+our $VERSION = '2.02';
 our $RELEASE = '%$RELEASE%';
 our $SHORTDESCRIPTION = 'Database middle layer to manage connections and schemes';
 our $LICENSECODE = '%$LICENSECODE%';
