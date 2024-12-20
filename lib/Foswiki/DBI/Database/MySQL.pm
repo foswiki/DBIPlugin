@@ -46,9 +46,7 @@ sub new {
   $this->{dsn} .= ';host=' . $this->{host};
   $this->{dsn} .= ';port=' . $this->{port} if $this->{port};
   $this->{params}{mysql_enable_utf8} = 1;
-
-# deprecated
-#  $this->{params}{mysql_auto_reconnect} = 1;
+  $this->{params}{mysql_auto_reconnect} = 1;
 
   return $this;
 }

@@ -17,4 +17,5 @@ lib/Foswiki/DBI/Schema/SQLite.pm 0644
 lib/Foswiki/Iterator/DBIterator.pm 0644
 lib/Foswiki/Plugins/DBIPlugin/Config.spec 0644
 lib/Foswiki/Plugins/DBIPlugin/DEPENDENCIES 0644
+lib/Foswiki/Plugins/DBIPlugin/MANIFEST 0644
 lib/Foswiki/Plugins/DBIPlugin.pm 0644

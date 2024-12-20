@@ -46,9 +46,7 @@ sub new {
   $this->{dsn} = 'dbi:MariaDB:database=' . $this->{database};
   $this->{dsn} .= ';host=' . $this->{host};
   $this->{dsn} .= ';port=' . $this->{port} if $this->{port};
-
-# deprecated
-#  $this->{params}{mariadb_auto_reconnect} = 1;
+  $this->{params}{mariadb_auto_reconnect} = 1;
 
   return $this;
 }

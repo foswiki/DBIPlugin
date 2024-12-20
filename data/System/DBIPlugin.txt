@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" date="1648549480" format="1.1" version="1"}%
+%META:TOPICINFO{author="ProjectContributor" date="1734685933" format="1.1" version="1"}%
 ---+!! %TOPIC%
 %FORMFIELD{"Description"}%
 
@@ -65,6 +65,7 @@ HERE
 ---++ Change History
 
 %TABLE{columnwidths="7em" tablewidth="100%"}%
+|  20 Dec 2024 | re-enabled auto_reconnect for mysql and mariadb databases |
 |  17 Jan 2024 | fixed mechanism upgrading database schemes; better default encoding of databases |
 |  27 Apr 2022 | initial release |
 
